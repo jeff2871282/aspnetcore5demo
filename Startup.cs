@@ -32,7 +32,6 @@ namespace aspnetcore5demo
             // using Microsoft.EntityFrameworkCore;
             services.AddDbContext<ContosoUniversityContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

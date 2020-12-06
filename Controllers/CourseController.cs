@@ -17,34 +17,66 @@ namespace aspnetcore5demo.Controllers
             this.db = db;
         }
 
+        [HttpGet("Courseid/{Courseid}")]
+        public ActionResult<IEnumerable<Course>> GetCourseByCourseid(int Courseid)
+        {
+            return db.Courses.Where(c => c.CourseId == Courseid).ToList();
+        }
+        
+        [HttpGet("Courseid/{Coursid}/{Credits}")]
+        public ActionResult<IEnumerable<Course>> GetCourseByIdandCred(int Coursid,int Credits)
+        {
+            return db.Courses.Where(c => c.CourseId == Coursid && c.Credits == Credits).ToList();
+        }
+        
         [HttpGet("")]
         public ActionResult<IEnumerable<Course>> GetCourse()
         {
             return this.db.Courses.ToList();
         }
 
-        // [HttpGet("{id}")]
-        // public ActionResult<TModel> GetTModelById(int id)
-        // {
-        //     return null;
-        // }
+        [HttpGet("{id}")]
+        public ActionResult<Course> GetCourseById(int id)
+        {
+            return db.Courses.Find(id);
+        }
 
-        // [HttpPost("")]
-        // public ActionResult<TModel> PostTModel(TModel model)
-        // {
-        //     return null;
-        // }
+        [HttpPost("")]
+        public ActionResult<Course> PostCourse(Course model)
+        {
+            db.Courses.Add(model);
+            db.SaveChanges();
+            return Created("/api/Course/"+model.CourseId,model);
+        }
 
-        // [HttpPut("{id}")]
-        // public IActionResult PutTModel(int id, TModel model)
-        // {
-        //     return NoContent();
-        // }
+        [HttpPut("{id}")]
+        public IActionResult PutCourse(int id, Course model)
+        {
+            var c = db.Courses.Find(id);
+            c.Title = model.Title;
+            
+            return NoContent();
+        }
 
-        // [HttpDelete("{id}")]
-        // public ActionResult<TModel> DeleteTModelById(int id)
-        // {
-        //     return null;
-        // }
+        [HttpDelete("{id}")]
+        public ActionResult<Course> DeleteCourseById(int id)
+        {
+            var c = db.Courses.Find(id);
+            db.Courses.Remove(c);
+            return Ok(id);
+        }
+
+        [HttpGet("depart/")]
+        public ActionResult<IEnumerable<Department>> GetDepartment()
+        {
+            return db.Departments.Asnotracking();
+        }
+
+        [HttpGet("depart/{id}")]
+        public ActionResult<IEnumerable<Course>> GetDepartment(int id)
+        {
+            return db.Courses.Where(c => c.DepartmentId ==id).ToList(); 
+        }
+        
     }
 }
